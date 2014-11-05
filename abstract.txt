@@ -1,0 +1,29 @@
+Title:
+Techniques for Enabling Highly Efficient Message Passing on Many-Core Architectures
+
+
+Abstract:
+Many-core architectures, such as the Intel Xeon Phi, provide dozens of
+cores and hundreds of hardware threads. Scientific application programmers
+are increasingly looking at the ways to utilize such large amount of
+light-weight cores for various programming models. With the number of
+processing cores increasing at a faster rate than other resources in
+the system, more and more applications start focusing on hybrid
+programming models where multiple threads interact with the MPI
+library (frequently called ``MPI+X'' models). A common mode of operation
+for such applications uses multiple threads to parallelize the computation,
+while one of the threads issues MPI operations. On the other hand, a
+large number of applications still function in an transitional MPI-only
+mode, where only single thread exists in each MPI process and an MPI
+process is launched for each available core on the system.
+After shortly introducing a multithreaded MPI implementation contributed
+to the hybrid MPI+threads model, this talk focuses on the performance
+issues existing in the transitional MPI-only model and exploiting the
+capabilities of many core architectures to overcome these issues. We
+first present a process-based asynchronous progress solution for MPI
+one-sided communication on multi- and many-core architectures by utilizing
+flexible number of dedicated cores; then we also discuss the way to utilize
+user-level processes within MPI to achieve better load balancing and
+light-weight checkpoint migration as our future work.
+
+
