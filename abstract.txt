@@ -1,29 +1,34 @@
 Title:
-Techniques for Enabling Highly Efficient Message Passing on Many-Core Architectures
+Casper: An Asynchronous Progress Model for MPI RMA on Many-Core Architectures
 
 
 Abstract:
-Many-core architectures, such as the Intel Xeon Phi, provide dozens of
-cores and hundreds of hardware threads. Scientific application programmers
-are increasingly looking at the ways to utilize such large amount of
-light-weight cores for various programming models. With the number of
-processing cores increasing at a faster rate than other resources in
-the system, more and more applications start focusing on hybrid
-programming models where multiple threads interact with the MPI
-library (frequently called ``MPI+X'' models). A common mode of operation
-for such applications uses multiple threads to parallelize the computation,
-while one of the threads issues MPI operations. On the other hand, a
-large number of applications still function in an transitional MPI-only
-mode, where only single thread exists in each MPI process and an MPI
-process is launched for each available core on the system.
-After shortly introducing a multithreaded MPI implementation contributed
-to the hybrid MPI+threads model, this talk focuses on the performance
-issues existing in the transitional MPI-only model and exploiting the
-capabilities of many core architectures to overcome these issues. We
-first present a process-based asynchronous progress solution for MPI
-one-sided communication on multi- and many-core architectures by utilizing
-flexible number of dedicated cores; then we also discuss the way to utilize
-user-level processes within MPI to achieve better load balancing and
-light-weight checkpoint migration as our future work.
-
+MPI-2 and MPI-3 introduced one-sided communication semantics 
+(also known as remote memory access or RMA) that allow a process to 
+access memory regions from other processes in distributed memory systems. 
+This model allows processes to move data without explicitly synchronizing 
+with the remote target process, in the sense that the remote target 
+does not necessarily need to actively receive or send data. While 
+such a model is useful for a number of communication patterns, the 
+MPI standard does not guarantee that such communication is asynchronous 
+in nature. That is, an MPI implementation might require the remote 
+target to make MPI calls to ensure communication progress so that any 
+RMA operations issued on it as a target complete. This talk introduces
+“Casper”, a process-based asynchronous progress solution for MPI 
+one-sided communication on multi- and many-core architectures. 
+Casper uses transparent MPI call redirection through PMPI and MPI-3
+shared memory windows to map memory from multiple user processes 
+into the address space of one or more ghost processes, thus allowing 
+for asynchronous progress where needed while allowing native 
+hardware-based communication where available. Unlike traditional 
+thread- and interrupt-based asynchronous progress models, Casper 
+provides the capability to dedicate an arbitrary number of ghost 
+processes for asynchronous progress thus balancing application 
+requirements with the capabilities of the underlying MPI implementation. 
+We present a detailed design of the proposed architecture including 
+several techniques for maintaining correctness per the MPI-3 standard
+as well as performance optimizations where possible. We also compare Casper 
+with traditional thread- and interrupt-based asynchronous progress models 
+and demonstrate its performance improvements with a variety of 
+microbenchmarks and a production chemistry application.
 
